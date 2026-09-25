@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FitTrack | Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { background: #0f172a; color: #e2e8f0; }
+    .card { border: 0; border-radius: 1rem; }
+    .btn-fit { background: #22c55e; border: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card p-4 shadow">
+          <h2 class="text-dark mb-1">Join FitTrack</h2>
+          <p class="text-muted">Create your workout tracker account</p>
+          <div id="successBox" class="alert alert-success d-none">Welcome to FitTrack — account created.</div>
+          <form id="regForm" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" id="name" class="form-control" />
+              <div class="invalid-feedback">Enter at least 3 characters.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" id="email" class="form-control" />
+              <div class="invalid-feedback">Enter a valid email address.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Age</label>
+              <input type="number" id="age" class="form-control" />
+              <div class="invalid-feedback">Age must be between 13 and 80.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Fitness Goal</label>
+              <select id="goal" class="form-select">
+                <option value="">Select goal</option>
+                <option>Weight Loss</option>
+                <option>Muscle Gain</option>
+                <option>Endurance</option>
+                <option>General Fitness</option>
+              </select>
+              <div class="invalid-feedback">Please select a fitness goal.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" id="password" class="form-control" />
+              <div class="invalid-feedback">Min 6 chars and at least one number.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" id="confirm" class="form-control" />
+              <div class="invalid-feedback">Passwords do not match.</div>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="terms" />
+              <label class="form-check-label" for="terms">I agree to FitTrack terms</label>
+              <div class="invalid-feedback">You must accept the terms.</div>
+            </div>
+            <button class="btn btn-fit w-100 py-2" type="submit">Create Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById("regForm");
+    const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    const mark = (el, ok) => {
+      el.classList.toggle("is-valid", ok);
+      el.classList.toggle("is-invalid", !ok);
+      return ok;
+    };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      const age = document.getElementById("age");
+      const goal = document.getElementById("goal");
+      const password = document.getElementById("password");
+      const confirm = document.getElementById("confirm");
+      const terms = document.getElementById("terms");
+      const a = Number(age.value);
+      const ok =
+        mark(name, name.value.trim().length >= 3) &
+        mark(email, emailOk(email.value)) &
+        mark(age, a >= 13 && a <= 80) &
+        mark(goal, goal.value !== "") &
+        mark(password, password.value.length >= 6 && /\d/.test(password.value)) &
+        mark(confirm, confirm.value === password.value && confirm.value !== "") &
+        (terms.classList.toggle("is-invalid", !terms.checked),
+         terms.classList.toggle("is-valid", terms.checked),
+         terms.checked);
+      document.getElementById("successBox").classList.toggle("d-none", !ok);
+    });
+  </script>
+</body>
+</html>
