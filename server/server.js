@@ -45,5 +45,9 @@ app.delete("/api/workouts/:id", async (req, res) => {
   res.json(deleted);
 });
 
+app.get('/', (req, res) => {
+  res.send('FitTrack API is running 🚀');
+});
+
 app.listen(5000, () => console.log("FitTrack API running at http://localhost:5000"));
 
