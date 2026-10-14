@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FitTrack | ES6 Workout Log</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f172a; color: #e2e8f0; padding: 24px; }
+    input { margin: 6px 6px 6px 0; padding: 8px; border-radius: 6px; border: 0; }
+    button { margin: 6px; padding: 8px 14px; background: #22c55e; border: 0; cursor: pointer; border-radius: 6px; font-weight: 600; }
+    li { margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <h1>FitTrack — Today's Workout Log</h1>
+  <p>Total calories: <strong id="total">0</strong></p>
+  <ul id="list"></ul>
+  <div>
+    <input id="exName" type="text" placeholder="Exercise name (e.g. Plank)" />
+    <input id="exCal" type="number" placeholder="Calories" />
+  </div>
+  <button id="addBtn">Add Workout</button>
+  <button id="promptBtn">Add with Popup</button>
+  <button id="intenseBtn">Show Intense Workouts</button>
+  <button id="clearBtn">Clear Log</button>
+  <script>
+    let workouts = [
+      { name: "Push-ups", sets: 3, reps: 15, calories: 120 },
+      { name: "Squats", sets: 4, reps: 12, calories: 180 },
+      { name: "Burpees", sets: 3, reps: 10, calories: 250 }
+    ];
+    const totalCalories = (arr) => arr.reduce((sum, w) => sum + w.calories, 0);
+    const intenseOnly = (arr) => arr.filter((w) => w.calories >= 200);
+    const formatLine = (w) => w.name + " - " + w.sets + "x" + w.reps + " (" + w.calories + " kcal)";
+    const render = (arr) => {
+      document.getElementById("list").innerHTML = arr.map((w) => "<li>" + formatLine(w) + "</li>").join("");
+      document.getElementById("total").textContent = totalCalories(arr);
+    };
+    const addWorkout = (name, calories) => {
+      name = (name || "").trim();
+      calories = Number(calories);
+      if (!name || !calories) {
+        alert("Workout not added. Name and calories are required.");
+        return;
+      }
+      workouts.push({ name: name, sets: 3, reps: 10, calories: calories });
+      render(workouts);
+      alert(name + " added. Total calories: " + totalCalories(workouts));
+    };
+    render(workouts);
+    alert("Welcome to FitTrack Workout Log");
+    document.getElementById("addBtn").addEventListener("click", function () {
+      addWorkout(document.getElementById("exName").value, document.getElementById("exCal").value);
+      document.getElementById("exName").value = "";
+      document.getElementById("exCal").value = "";
+    });
+    document.getElementById("promptBtn").addEventListener("click", function () {
+      addWorkout(prompt("Enter exercise name:"), prompt("Enter calories burned:"));
+    });
+    document.getElementById("intenseBtn").addEventListener("click", function () {
+      const hard = intenseOnly(workouts);
+      alert(hard.length ? "Intense workouts:\n" + hard.map(formatLine).join("\n") : "Intense workouts:\nNone yet (calories must be 200 or more).");
+    });
+    document.getElementById("clearBtn").addEventListener("click", function () {
+      if (confirm("Clear the entire workout log?")) {
+        workouts = [];
+        render(workouts);
+        alert("Log cleared.");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Optional: Render "Blueprint". You can also create the service by hand (see DEPLOY.md).
+services:
+  - type: web
+    name: fittrack-api
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: MONGODB_URI
+        sync: false          # paste your Atlas connection string in the dashboard
+      - key: JWT_SECRET
+        generateValue: true  # Render creates a random secret for you
+      - key: CLIENT_URL
+        sync: false          # your Netlify URL, e.g. https://fitnessracker.netlify.app
